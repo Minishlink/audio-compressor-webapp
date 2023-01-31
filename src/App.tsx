@@ -127,7 +127,7 @@ export function App() {
           </div>
         )}
       </section>
-      <footer>
+      <div id="author">
         <p>
           by Louis Lagrange (
           <a href="https://twitter.com/Minishlink" target="_blank">
@@ -135,7 +135,17 @@ export function App() {
           </a>
           )
         </p>
-      </footer>
+      </div>
+      <div id="source-code">
+        <p>
+          <a
+            href="https://github.com/Minishlink/audio-compressor-webapp"
+            target="_blank"
+          >
+            GitHub
+          </a>
+        </p>
+      </div>
     </div>
   );
 }
