@@ -18,48 +18,62 @@ export function App() {
   >();
 
   const compress = useCallback(async () => {
-    setProgress(undefined);
-    setError(undefined);
-    setOutput(undefined);
+    try {
+      setProgress(undefined);
 
-    if (!input) {
-      return;
+      setError(undefined);
+      setOutput(undefined);
+
+      if (!input) {
+        return;
+      }
+
+      if (!ffmpeg.isLoaded()) {
+        await ffmpeg.load();
+      }
+
+      const { name } = input.file;
+      ffmpeg.FS("writeFile", name, await fetchFile(input.file));
+      const outputFilename = `${name}_compressed_${Date.now()}.ogg`;
+      await ffmpeg.run(
+        "-i",
+        name,
+        "-c:a",
+        "libopus",
+        "-b:a",
+        "32k",
+        "-vbr",
+        "on",
+        "-compression_level",
+        "10",
+        "-frame_duration",
+        "60",
+        "-application",
+        "voip",
+        outputFilename
+      );
+      const data = ffmpeg.FS("readFile", outputFilename);
+      if (!data.length) {
+        setError("An unknown error occurred, see developer console");
+        return;
+      }
+
+      setOutput({
+        url: URL.createObjectURL(
+          new Blob([data.buffer], { type: "audio/ogg" })
+        ),
+        name: outputFilename,
+      });
+    } catch (error) {
+      setError(
+        typeof error === "object" &&
+          !!error &&
+          "message" in error &&
+          typeof error.message === "string"
+          ? error.message
+          : "An unknown error occurred, see developer console"
+      );
     }
-
-    if (!ffmpeg.isLoaded()) {
-      await ffmpeg.load();
-    }
-
-    const { name } = input.file;
-    ffmpeg.FS("writeFile", name, await fetchFile(input.file));
-    const outputFilename = `${name}_compressed_${Date.now()}.ogg`;
-    await ffmpeg.run(
-      "-i",
-      name,
-      "-c:a",
-      "libopus",
-      "-b:a",
-      "32k",
-      "-vbr",
-      "on",
-      "-compression_level",
-      "10",
-      "-frame_duration",
-      "60",
-      "-application",
-      "voip",
-      outputFilename
-    );
-    const data = ffmpeg.FS("readFile", outputFilename);
-    if (!data.length) {
-      setError("An unknown error occurred, see developer console");
-      return;
-    }
-
-    setOutput({
-      url: URL.createObjectURL(new Blob([data.buffer], { type: "audio/ogg" })),
-      name: outputFilename,
-    });
   }, [ffmpeg, input]);
 
   return (
