@@ -86,7 +86,7 @@ export function App() {
         <h1>Audio compressor</h1>
       </header>
       <section>
-        <p>Compress your dialogue audio files locally on browser</p>
+        <p>Compress your dialogue audio files locally on your browser</p>
         <input
           type="file"
           accept="audio/*"
