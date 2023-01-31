@@ -81,8 +81,10 @@ export function App() {
 
   return (
     <div className="App">
-      <h1>Audio compressor</h1>
-      <div>
+      <header>
+        <h1>Audio compressor</h1>
+      </header>
+      <section>
         <p>Compress your dialogue audio files locally on browser</p>
         <input
           type="file"
@@ -123,7 +125,16 @@ export function App() {
             </a>
           </div>
         )}
-      </div>
+      </section>
+      <footer>
+        <p>
+          by Louis Lagrange (
+          <a href="https://twitter.com/Minishlink" target="_blank">
+            @Minishlink
+          </a>
+          )
+        </p>
+      </footer>
     </div>
   );
 }
