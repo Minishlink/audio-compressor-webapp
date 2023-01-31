@@ -5,8 +5,8 @@
   text-align: center;
 }
 
-.card {
-  padding: 2em;
+.error {
+  color: #cc0000;
 }
 
 .player-container {
