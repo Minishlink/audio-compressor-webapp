@@ -6,7 +6,7 @@ import "./App.css";
 
 export function App() {
   const [input, setInput] = useState<{ file: File; url: string } | undefined>();
-  const [progress, setProgress] = useState<number | undefined>();
+  const [progress, setProgress] = useState<number | undefined | null>(null);
   const [error, setError] = useState<string | undefined>();
   const [ffmpeg] = useState(() =>
     createFFmpeg({
@@ -68,6 +68,7 @@ export function App() {
         name: outputFilename,
       });
     } catch (error) {
+      setProgress(null);
       setError(
         typeof error === "object" &&
           !!error &&
@@ -90,7 +91,7 @@ export function App() {
           type="file"
           accept="audio/*"
           onChange={(event) => {
-            setProgress(undefined);
+            setProgress(null);
             setError(undefined);
             setOutput(undefined);
 
@@ -106,7 +107,7 @@ export function App() {
               <audio controls src={input.url} />
             </div>
             <button onClick={compress}>Compress</button>
-            {!!progress && progress !== 100 && (
+            {progress !== null && progress !== 100 && (
               <div>
                 <progress max="100" value={progress}>{`${progress}%`}</progress>
               </div>
