@@ -1,5 +1,7 @@
 import { useCallback, useState } from "react";
 import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
+import { getAnalytics, logEvent } from "firebase/analytics";
+import { app as firebaseApp } from "./firebase";
 import "./App.css";
 
 export function App() {
@@ -18,9 +20,10 @@ export function App() {
   >();
 
   const compress = useCallback(async () => {
+    logEvent(getAnalytics(firebaseApp), "compress");
+
     try {
       setProgress(undefined);
-
       setError(undefined);
       setOutput(undefined);
 
