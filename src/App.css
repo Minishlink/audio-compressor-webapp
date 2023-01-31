@@ -8,3 +8,7 @@
 .card {
   padding: 2em;
 }
+
+#player-container {
+  margin-top: 1em;
+}
